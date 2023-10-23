@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 export class FileService {
   private server = 'http://localhost:8080';
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {}
     
     // define function to upload files
     upload(formData: FormData): Observable<HttpEvent<string[]>> {
@@ -17,5 +17,12 @@ export class FileService {
     }
 
     // define function to download files
-  }
+    download(filename: string): Observable<HttpEvent<Blob>> {
+      return this.http.get('${this}/file/download/${filename}', {
+        reportProgress: true,
+        observe: 'events',
+        responseType: 'blob'
+      });
+    }
+
 }
